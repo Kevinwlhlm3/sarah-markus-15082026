@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sarah & Markus 💌</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: #1a0a2e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lato', sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Foto-Kacheln im Hintergrund ── */
+    .photo-grid {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      z-index: 0;
+      pointer-events: none;
+    }
+    @media (min-width: 600px) {
+      .photo-grid {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+      }
+    }
+    .photo-tile {
+      overflow: hidden;
+      position: relative;
+    }
+    .photo-tile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.35) saturate(0.7);
+      transition: filter 0.6s;
+    }
+    /* Platzhalter-Hintergrund wenn kein Bild */
+    .photo-tile-placeholder {
+      width: 100%;
+      height: 100%;
+      background: #0d0520;
+    }
+    /* Dunkler Gradient über das ganze Grid */
+    .photo-grid::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(26,10,46,0.5) 0%, rgba(26,10,46,0.85) 100%);
+    }
+
+    /* Stars */
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Scene */
+    .scene {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(16px, 4vw, 32px);
+      padding: 20px;
+    }
+
+    .title-block {
+      text-align: center;
+    }
+    .title-names {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(28px, 7vw, 48px);
+      color: rgba(255,255,255,0.92);
+      letter-spacing: 1px;
+    }
+    .title-date {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    .hint {
+      color: rgba(255,255,255,0.35);
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.35; }
+      50%       { opacity: 0.7; }
+    }
+
+    /* Envelope */
+    .envelope-wrap {
+      position: relative;
+      width: min(340px, 88vw);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .envelope-wrap:hover { transform: scale(1.03); }
+    .envelope-wrap.opened { cursor: default; pointer-events: none; }
+
+    .envelope {
+      width: 100%;
+      aspect-ratio: 1.6 / 1;
+      position: relative;
+    }
+
+    .env-body {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, #f5e6c8 0%, #eeddb0 100%);
+      border-radius: 4px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .env-left, .env-right, .env-bottom {
+      position: absolute;
+      bottom: 0;
+      width: 50%;
+      height: 55%;
+    }
+    .env-left {
+      left: 0;
+      background: linear-gradient(135deg, #e8d5a3 0%, #dcc88a 100%);
+      clip-path: polygon(0 0, 0 100%, 100% 100%);
+    }
+    .env-right {
+      right: 0;
+      background: linear-gradient(225deg, #e0cc96 0%, #d4bc7a 100%);
+      clip-path: polygon(100% 0, 0 100%, 100% 100%);
+    }
+    .env-bottom {
+      left: 0;
+      width: 100%;
+      height: 55%;
+      background: linear-gradient(180deg, #dcc88a 0%, #c9b06a 100%);
+      clip-path: polygon(0 100%, 50% 0%, 100% 100%);
+    }
+
+    .env-flap {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 55%;
+      background: linear-gradient(180deg, #f0dfa8 0%, #e4cf90 100%);
+      clip-path: polygon(0 0, 50% 100%, 100% 0);
+      transform-origin: top center;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 3;
+    }
+    .envelope-wrap.opened .env-flap {
+      transform: rotateX(180deg);
+    }
+
+    .seal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px;
+      height: 48px;
+      background: radial-gradient(circle at 35% 35%, #e05c6e, #a0182a);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      z-index: 4;
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    .envelope-wrap.opened .seal {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0);
+    }
+
+    .letter {
+      position: absolute;
+      bottom: 8%;
+      left: 50%;
+      width: 88%;
+      background: #fffdf5;
+      border-radius: 3px;
+      padding: 24px 20px 20px;
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.15);
+      z-index: 2;
+      transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s,
+                  opacity 0.5s ease 0.3s;
+      transform: translateX(-50%) translateY(0%);
+      opacity: 0;
+      pointer-events: none;
+      max-height: 80%;
+    }
+    .envelope-wrap.opened .letter {
+      transform: translateX(-50%) translateY(-110%);
+      opacity: 1;
+    }
+
+    .letter-content {
+      opacity: 0;
+      transition: opacity 0.6s ease 0.9s;
+    }
+    .envelope-wrap.opened .letter-content {
+      opacity: 1;
+    }
+
+    .letter-date {
+      font-size: 11px;
+      color: #b8a880;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      text-align: right;
+    }
+    .letter-salutation {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 18px;
+      color: #5a3e28;
+      margin-bottom: 12px;
+    }
+    .letter-body {
+      font-size: 13px;
+      line-height: 1.85;
+      color: #6b5040;
+    }
+    .letter-body p + p { margin-top: 10px; }
+    .letter-signature {
+      margin-top: 20px;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 22px;
+      color: #5a3e28;
+      text-align: right;
+    }
+    .letter-line {
+      width: 100%;
+      height: 1px;
+      background: repeating-linear-gradient(90deg, #e8dcc8 0px, #e8dcc8 4px, transparent 4px, transparent 8px);
+      margin: 8px 0;
+    }
+
+    /* Full screen letter */
+    .fullscreen-letter {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 4, 20, 0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease 1.4s;
+      padding: 24px;
+    }
+    .fullscreen-letter.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .fullscreen-paper {
+      background: #fffdf5;
+      border-radius: 6px;
+      padding: clamp(28px, 6vw, 52px);
+      max-width: 540px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+      position: relative;
+    }
+    .fullscreen-paper::before {
+      content: '';
+      position: absolute;
+      left: 48px;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: rgba(200, 170, 130, 0.3);
+    }
+    .fl-date {
+      font-size: 12px;
+      color: #b8a880;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-align: right;
+      margin-bottom: 24px;
+    }
+    .fl-salutation {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(22px, 4vw, 28px);
+      color: #4a2e18;
+      margin-bottom: 20px;
+    }
+    .fl-body {
+      font-size: clamp(14px, 2.5vw, 16px);
+      line-height: 2;
+      color: #5a4030;
+    }
+    .fl-body p + p { margin-top: 16px; }
+    .fl-signature {
+      margin-top: 32px;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(24px, 4vw, 32px);
+      color: #4a2e18;
+      text-align: right;
+    }
+    .fl-heart {
+      text-align: center;
+      font-size: 28px;
+      margin-top: 16px;
+    }
+
+    .close-hint {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.25);
+      font-size: 12px;
+      letter-spacing: 1px;
+      z-index: 101;
+      opacity: 0;
+      transition: opacity 0.6s ease 2s;
+    }
+    .fullscreen-letter.visible ~ .close-hint { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<!-- Foto-Kacheln -->
+<div class="photo-grid">
+  <!--
+    Bilder einfach in denselben Ordner wie diese HTML-Datei legen
+    und die Dateinamen unten eintragen (z.B. foto1.jpg, foto2.jpg …)
+    Empfehlung: 12 Fotos, quadratisch oder hochkant funktioniert am besten
+  -->
+  <div class="photo-tile"><img src="foto01.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
+  <div class="photo-tile"><img src="foto02.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
+  <div class="photo-tile"><img src="foto03.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
+  <div class="photo-tile"><img src="foto04.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
+  <div class="photo-tile"><img src="foto05.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
+  <div class="photo-tile"><img src="foto06.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
+  <div class="photo-tile"><img src="foto07.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
+  <div class="photo-tile"><img src="foto08.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
+  <div class="photo-tile"><img src="foto09.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
+  <div class="photo-tile"><img src="foto10.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
+  <div class="photo-tile"><img src="foto11.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
+  <div class="photo-tile"><img src="foto12.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
+</div>
+
+<canvas class="stars" id="stars"></canvas>
+
+<div class="scene">
+  <div class="title-block">
+    <div class="title-names">Sarah & Markus</div>
+    <div class="title-date">· 2025 ·</div>
+  </div>
+
+  <p class="hint">Tippe auf den Umschlag</p>
+
+  <div class="envelope-wrap" id="envelope" onclick="openEnvelope()">
+    <div class="envelope">
+      <div class="env-body"></div>
+      <div class="env-left"></div>
+      <div class="env-right"></div>
+      <div class="env-bottom"></div>
+      <div class="env-flap"></div>
+      <div class="seal">💌</div>
+
+      <div class="letter">
+        <div class="letter-content">
+          <div class="letter-date">2025</div>
+          <div class="letter-salutation">Meine liebste Sarah,</div>
+          <div class="letter-line"></div>
+          <div class="letter-body">
+            <p>Es gibt Menschen, die man trifft und sofort weiß — der bleibt.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Full Letter -->
+<div class="fullscreen-letter" id="fullLetter" onclick="closeLetter()">
+  <div class="fullscreen-paper" onclick="event.stopPropagation()">
+    <div class="fl-date">2025</div>
+    <div class="fl-salutation">Meine liebste Sarah,</div>
+    <div class="fl-body">
+      <p>
+        Es gibt Menschen, die man trifft und sofort weiß — der bleibt.
+        Du warst von Anfang an so eine Person für mich.
+      </p>
+      <p>
+        [Hier kommt dein persönlicher Text rein.]
+      </p>
+      <p>
+        Heute ist dein großer Tag. Und ich bin so unendlich stolz und glücklich,
+        ihn an deiner Seite erleben zu dürfen.
+      </p>
+      <p>
+        Ich wünsche euch beiden eine Liebe, die jeden Tag wächst —
+        und ganz viele Momente, bei denen ihr denkt: genau so sollte es sein.
+      </p>
+      <p>
+        Danke, dass du meine beste Freundin bist. ❤️
+      </p>
+    </div>
+    <div class="fl-signature">In ewiger Freundschaft,<br>Kevin</div>
+    <div class="fl-heart">💌</div>
+  </div>
+</div>
+<div class="close-hint">Tippe außerhalb zum Schließen</div>
+
+<script>
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  for (let i = 0; i < 180; i++) {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const r = Math.random() * 1.5 + 0.3;
+    const opacity = Math.random() * 0.7 + 0.1;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${opacity})`;
+    ctx.fill();
+  }
+
+  function openEnvelope() {
+    const env = document.getElementById('envelope');
+    env.classList.add('opened');
+    setTimeout(() => {
+      document.getElementById('fullLetter').classList.add('visible');
+    }, 1200);
+  }
+
+  function closeLetter() {
+    document.getElementById('fullLetter').classList.remove('visible');
+  }
+</script>
+</body>
+</html>
