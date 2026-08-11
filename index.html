@@ -24,16 +24,10 @@
       position: fixed;
       inset: 0;
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(6, 1fr);
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 1fr;
       z-index: 0;
       pointer-events: none;
-    }
-    @media (min-width: 600px) {
-      .photo-grid {
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: repeat(3, 1fr);
-      }
     }
     .photo-tile {
       overflow: hidden;
@@ -360,15 +354,6 @@
   <div class="photo-tile"><img src="foto01.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
   <div class="photo-tile"><img src="foto02.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
   <div class="photo-tile"><img src="foto03.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
-  <div class="photo-tile"><img src="foto04.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
-  <div class="photo-tile"><img src="foto05.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
-  <div class="photo-tile"><img src="foto06.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
-  <div class="photo-tile"><img src="foto07.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
-  <div class="photo-tile"><img src="foto08.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
-  <div class="photo-tile"><img src="foto09.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
-  <div class="photo-tile"><img src="foto10.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
-  <div class="photo-tile"><img src="foto11.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
-  <div class="photo-tile"><img src="foto12.jpg" alt="" onerror="this.parentElement.innerHTML='<div class=\'photo-tile-placeholder\'></div>'" /></div>
 </div>
 
 <canvas class="stars" id="stars"></canvas>
@@ -376,7 +361,7 @@
 <div class="scene">
   <div class="title-block">
     <div class="title-names">Sarah & Markus</div>
-    <div class="title-date">· 2025 ·</div>
+    <div class="title-date">· 15. August 2026 ·</div>
   </div>
 
   <p class="hint">Tippe auf den Umschlag</p>
@@ -392,11 +377,11 @@
 
       <div class="letter">
         <div class="letter-content">
-          <div class="letter-date">2025</div>
-          <div class="letter-salutation">Meine liebste Sarah,</div>
+          <div class="letter-date">15. August 2026</div>
+          <div class="letter-salutation">Liebe Sarah, lieber Markus,</div>
           <div class="letter-line"></div>
           <div class="letter-body">
-            <p>Es gibt Menschen, die man trifft und sofort weiß — der bleibt.</p>
+            <p>Das hier ist der erste Brief eures neuen Briefkastens.</p>
           </div>
         </div>
       </div>
@@ -407,29 +392,34 @@
 <!-- Full Letter -->
 <div class="fullscreen-letter" id="fullLetter" onclick="closeLetter()">
   <div class="fullscreen-paper" onclick="event.stopPropagation()">
-    <div class="fl-date">2025</div>
-    <div class="fl-salutation">Meine liebste Sarah,</div>
+    <div class="fl-date">15. August 2026</div>
+    <div class="fl-salutation">Liebe Sarah, lieber Markus,</div>
     <div class="fl-body">
       <p>
-        Es gibt Menschen, die man trifft und sofort weiß — der bleibt.
-        Du warst von Anfang an so eine Person für mich.
+        Das hier ist der erste Brief eures neuen Briefkastens —
+        und wir fanden, der sollte von uns kommen.
       </p>
       <p>
-        [Hier kommt dein persönlicher Text rein.]
+        Sarah, wir kennen uns seit dem Kindergarten. Wir haben zusammen
+        die Schulzeit überlebt, zu viele Partys gefeiert und uns durch
+        alles begleitet, was das Leben so mitbringt. Dass ich heute hier
+        stehe und zusehen darf, wie du heiratest — das macht mich wirklich stolz.
       </p>
       <p>
-        Heute ist dein großer Tag. Und ich bin so unendlich stolz und glücklich,
-        ihn an deiner Seite erleben zu dürfen.
+        Markus, du bist mit der Zeit einer von uns geworden.
+        Spätestens beim ersten gemeinsamen Fußballabend war klar:
+        der passt. Wir sind froh, dass du da bist.
       </p>
       <p>
-        Ich wünsche euch beiden eine Liebe, die jeden Tag wächst —
-        und ganz viele Momente, bei denen ihr denkt: genau so sollte es sein.
+        Wir wünschen euch beiden alles Gute — eine Liebe, die hält,
+        ein Zuhause, das sich warm anfühlt, und ganz viele Momente,
+        bei denen ihr einfach nur denkt: genau so soll es sein.
       </p>
       <p>
-        Danke, dass du meine beste Freundin bist. ❤️
+        Auf alles, was noch kommt. ❤️
       </p>
     </div>
-    <div class="fl-signature">In ewiger Freundschaft,<br>Kevin</div>
+    <div class="fl-signature">Marisa, Kevin, Theo & Henry</div>
     <div class="fl-heart">💌</div>
   </div>
 </div>
