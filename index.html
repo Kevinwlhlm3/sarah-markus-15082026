@@ -168,7 +168,7 @@
       background: linear-gradient(180deg, #f0dfa8 0%, #e4cf90 100%);
       clip-path: polygon(0 0, 50% 100%, 100% 0);
       transform-origin: top center;
-      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 3;
     }
     .envelope-wrap.opened .env-flap {
@@ -207,8 +207,8 @@
       padding: 24px 20px 20px;
       box-shadow: 0 -2px 12px rgba(0,0,0,0.15);
       z-index: 2;
-      transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s,
-                  opacity 0.5s ease 0.3s;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s,
+                  opacity 0.3s ease 0.2s;
       transform: translateX(-50%) translateY(0%);
       opacity: 0;
       pointer-events: none;
@@ -221,7 +221,7 @@
 
     .letter-content {
       opacity: 0;
-      transition: opacity 0.6s ease 0.9s;
+      transition: opacity 0.3s ease 0.5s;
     }
     .envelope-wrap.opened .letter-content {
       opacity: 1;
@@ -274,7 +274,7 @@
       z-index: 100;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.6s ease 1.4s;
+      transition: opacity 0.4s ease 0.7s;
       padding: 24px;
     }
     .fullscreen-letter.visible {
@@ -345,7 +345,7 @@
       z-index: 102;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.6s ease 2s;
+      transition: opacity 0.4s ease 1.2s;
       background: rgba(255,255,255,0.12);
       border: 1px solid rgba(255,255,255,0.25);
       color: rgba(255,255,255,0.8);
@@ -468,7 +468,7 @@
     env.classList.add('opened');
     setTimeout(() => {
       document.getElementById('fullLetter').classList.add('visible');
-    }, 1200);
+    }, 650);
   }
 
   function closeLetter() {
